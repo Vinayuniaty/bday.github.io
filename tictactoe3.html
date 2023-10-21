@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic-Tac-Toe Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #007BFF;
+            font-size: 24px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            font-size: 36px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .cell:hover {
+            background-color: #f7e1e1;
+        }
+
+        #message {
+            color: #ff6b6b;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic-Tac-Toe</h1>
+        <div id="message"></div>
+        <table>
+            <tr>
+                <td class="cell" onclick="makeMove(this)"></td>
+                <td class="cell" onclick="makeMove(this)"></td>
+                <td class="cell" onclick="makeMove(this)"></td>
+            </tr>
+            <tr>
+                <td class="cell" onclick="makeMove(this)"></td>
+                <td class="cell" onclick="makeMove(this)"></td>
+                <td class="cell" onclick="makeMove(this)"></td>
+            </tr>
+            <tr>
+                <td class="cell" onclick="makeMove(this)"></td>
+                <td class="cell" onclick="makeMove(this)"></td>
+                <td class="cell" onclick="makeMove(this)"></td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        let currentPlayer = "X";
+        let cells = document.querySelectorAll(".cell");
+        let message = document.getElementById("message");
+        let gameOver = false;
+
+        function makeMove(cell) {
+            if (!cell.innerHTML && !message.innerHTML && !gameOver) {
+                cell.innerHTML = currentPlayer;
+                checkWinner();
+                if (!gameOver) {
+                    currentPlayer = currentPlayer === "X" ? "O" : "X";
+                    makeComputerMove();
+                }
+            }
+        }
+
+        function checkWinner() {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6]             // Diagonals
+            ];
+
+            for (const combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (cells[a].innerHTML && cells[a].innerHTML === cells[b].innerHTML && cells[a].innerHTML === cells[c].innerHTML) {
+                    message.innerHTML = `Player ${cells[a].innerHTML} wins!`;
+                    gameOver = true;
+                    if (cells[a].innerHTML === "X") {
+                        // Redirect to blank1.html if player X wins
+                        window.location.href = "blank3.html"; }
+                        else if (cells[a].innerHTML === "O") {
+                // Redirect to the "sorrybabe.html" page if player O (computer) wins
+                window.location.href = "sorry.html";
+            }
+                }
+            }
+        }
+
+        function makeComputerMove() {
+            if (!gameOver) {
+                const emptyCells = [...cells].filter(cell => !cell.innerHTML);
+                if (emptyCells.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+                    emptyCells[randomIndex].innerHTML = currentPlayer;
+                    checkWinner();
+                    if (!gameOver) {
+                        currentPlayer = currentPlayer === "X" ? "O" : "X";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
